@@ -23,7 +23,7 @@ module.exports = {
                 exclude: "/node-modules"
             },
             {
-                test:/\.(FBX|jpg)/,
+                test:/\.(FBX|jpg|fbx)/,
                 type: 'asset/resource',
             }
         ]
