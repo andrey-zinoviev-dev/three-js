@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 module.exports = {
     entry: {
         main: './src/index.js',
@@ -25,12 +27,20 @@ module.exports = {
             {
                 test:/\.(FBX|jpg|fbx)/,
                 type: 'asset/resource',
+            },
+            {
+                test: /\.css$/,
+                use: [MiniCssExtractPlugin.loader, {
+                    loader: 'css-loader',
+                }],
             }
+           
         ]
     },
     plugins: [
         new HtmlWebPlugin ({
             template: './src/index.html',
-        })
+        }),
+        new MiniCssExtractPlugin(),
     ]
 }
