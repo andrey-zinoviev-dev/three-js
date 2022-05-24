@@ -14,6 +14,7 @@
     "@tweenjs/tween.js": "^18.6.4",
     "core-js": "^3.22.5",
     "three": "^0.140.2",
+    "threex.domevents": "^1.0.1",
     "webpack": "^5.72.1"
   },
   "devDependencies": {

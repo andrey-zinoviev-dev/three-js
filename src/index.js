@@ -12,20 +12,10 @@ import * as TWEEN from '@tweenjs/tween.js';
 
 import './styles/index.css';
 
+
+
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color(0xFFFFFF);
-// const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-
-// scene.add(new THREE.AxesHelper(5))
-
-// const light = new THREE.PointLight()
-// light.position.set(0.8, 1.4, 1.0)
-// scene.add(light)
-
-const color = 0xFFFFFF;
-// const intensity = 10;
-// const ambientLight = new THREE.AmbientLight(color, intensity);
-// scene.add(ambientLight)
 
 const camera = new THREE.PerspectiveCamera(
     75,
@@ -38,9 +28,9 @@ const renderer = new THREE.WebGLRenderer({
     antialias: true,
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.querySelector('.main__content').append(renderer.domElement);
+document.querySelector('.main__canvas').append(renderer.domElement);
 
-camera.position.z = 0.8;
+camera.position.z = 1;
 
 //controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -51,6 +41,8 @@ controls.maxPolarAngle = 2.1;
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.rotateSpeed = 0.85;
+
+//raycaster for model events
 
 //textures
 const extTexture = new THREE.TextureLoader().load(texture1);
@@ -80,6 +72,8 @@ fbxLoader.load(
                 }
             }
         });
+        model.scale.multiplyScalar(0.75);
+
         //variable test
         loadedModel = model;
         scene.add(model);
@@ -96,12 +90,30 @@ function animate() {
 animate();
 
 button.addEventListener('click', () => {
-    console.log(camera.position, loadedModel);
-    new TWEEN.Tween(camera.position)
+    // console.log(camera.position, loadedModel);
+    const tweenA = new TWEEN.Tween(camera.position)
     .to({
-        x: -2,
-        y:0,
+        x: 0.75,
+        y: 0.15,
         z: 1,
     }, 1000)
     .start();
+    
+    const tweenB = new TWEEN.Tween(loadedModel.scale)
+    .to({
+        x: 1.2,
+        y: 1.2,
+        z: 1.2
+    }, 350)
+        // .start();
+    tweenA.chain(tweenB);
+    // .chain(    
+    //     new TWEEN.Tween(loadedModel.scale)
+    //     .to({
+    //         x: 1,
+    //         y: 1,
+    //         z: 1
+    //     })
+    //     .start()
+    // );
 })
