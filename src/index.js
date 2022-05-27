@@ -23,6 +23,7 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 )
+camera.position.z = 1;
 
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -30,7 +31,8 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector('.main__canvas').append(renderer.domElement);
 
-camera.position.z = 1;
+renderer.domElement.addEventListener('click', onCanvasClick);
+
 
 //controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -51,7 +53,12 @@ const intTexture = new THREE.TextureLoader().load(texture2);
 const extMaterial = new THREE.MeshBasicMaterial({ map: extTexture, name: "t-shirt" });
 const intMaterial = new THREE.MeshBasicMaterial({ map: intTexture, name: "inside" });
 
+//raycaster
+const raycaster = new THREE.Raycaster();
+
+
 let loadedModel;
+let meshesFromLoadedModel = [];
 
 const fbxLoader = new FBXLoader();
 fbxLoader.load(
@@ -70,13 +77,17 @@ fbxLoader.load(
                     });
 
                 }
+                meshesFromLoadedModel.push(child);
             }
         });
         model.scale.multiplyScalar(0.75);
 
         //variable test
         loadedModel = model;
+
+        // meshesFromLoadedModel.push(model)
         scene.add(model);
+        // scene.add(model);
     }
 )
 
@@ -97,6 +108,7 @@ button.addEventListener('click', () => {
         y: 0.15,
         z: 1,
     }, 1000)
+    .easing(TWEEN.Easing.Cubic.InOut)
     .start();
     
     const tweenB = new TWEEN.Tween(loadedModel.scale)
@@ -105,6 +117,7 @@ button.addEventListener('click', () => {
         y: 1.2,
         z: 1.2
     }, 350)
+    .easing(TWEEN.Easing.Cubic.InOut)
         // .start();
     tweenA.chain(tweenB);
     // .chain(    
@@ -116,4 +129,23 @@ button.addEventListener('click', () => {
     //     })
     //     .start()
     // );
-})
+});
+
+//raycaster events test
+function onCanvasClick(evt) {
+    const mouse = {
+        x: (evt.clientX/renderer.domElement.clientWidth) *2 -1,
+        y: -(evt.clientY/renderer.domElement.clientHeight) *2 +1,
+    }
+    
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(meshesFromLoadedModel, false);
+    
+    if(intersects.length > 0) {
+        intersects.forEach((mesh) => {
+            console.log(mesh);
+        });
+    }
+
+};
