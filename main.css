@@ -1,8 +1,146 @@
+/*!**********************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/font/fonts.css ***!
+  \**********************************************************************/
+@font-face {
+    font-family: 'Montserrat';
+    src: url(63fae500fdcf19ce83d4.ttf) format('truetype');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url(3a0917345468c959207a.ttf) format('truetype');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url(ac98a5f5ca71180fe293.ttf) format('truetype');
+    font-weight: 400;
+}
+
+
 /*!****************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/root/root.css ***!
   \****************************************************************************/
 .root {
   margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+/*!***********************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/main/__content/main__content.css ***!
+  \***********************************************************************************************/
+.main__content {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+/*!*****************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/main/__canvas/__canvas.css ***!
+  \*****************************************************************************************/
+.main__canvas {
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+}
+/*!*************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/main/__headline/main__headline.css ***!
+  \*************************************************************************************************/
+@keyframes lampIgnition {
+  15%, 20%, 50%, 70%, 85%,
+ 100%
+ {
+   color: #ff051b;
+   text-shadow: 0 0px 10px #ff051b, 0 0px 35px #ff051b, 0 0 55px #ff051b;
+ }
+ 0%, 19%, 29%, 49%, 55%, 90% {
+   text-shadow: none;
+   color: grey;
+ }
+}
+.main__headline {
+   /* font-size: 32px; */
+  font-size: 72px;
+  margin: 0;
+  text-align: center;
+  /* color: transparent; */
+  color: #ff051b;
+  /* -webkit-text-stroke: 2px #ff051b; */
+  text-shadow: 0 0px 25px #ff051b;
+  letter-spacing: 20px;
+  margin: 5% 0 2% 0;
+  z-index: 20;
+   /* color: grey; */
+}
+
+@media screen and (max-width: 1439px) {
+  .main__headline {
+    font-size: 52px;
+    /* font-size: 48px; */
+    letter-spacing: 12px;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .main__headline {
+    font-size: 42px;
+    letter-spacing: 8px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .main__headline {
+    font-size: 27px;
+    margin: 5% 0;
+  }
+}
+/* @media screen and (max-width: 1279px) {
+  .main__headline {
+    font-size: 42px;
+  }
+} */
+/*!*******************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/main/__image/main__image.css ***!
+  \*******************************************************************************************/
+.main__image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* background-size: cover; */
+  /* object-fit: cover; */
+  z-index: 5;
+  filter: blur(3px);
+  transform-style: preserve-3d;
+  object-fit: cover;
+  transform: scale(1.1);
+  /* transition: transform 0.5s ease-in-out; */
+}
+/*!****************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/main/main.css ***!
+  \****************************************************************************/
+.main {
+    overflow-x: hidden;
+}
+/*!******************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/main/__image/_background/main__image_background.css ***!
+  \******************************************************************************************************************/
+.main__image_background {
+  filter: blur(0px);
+  object-fit: cover;
+  z-index: 10;
+}
+/*!****************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/blocks/main/__image/_guitarist/main__image_guitarist.css ***!
+  \****************************************************************************************************************/
+.main__image_guitarist {
+  top: 0%;
+  right: -9%;
+  height: 110%;
+  z-index: 15;
 }
 /*!************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./src/styles/index.css ***!
