@@ -31,7 +31,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector('.main__canvas').append(renderer.domElement);
 
-renderer.domElement.addEventListener('click', onCanvasClick);
+renderer.domElement.addEventListener('click', onModelClick);
 
 
 //controls
@@ -132,7 +132,7 @@ button.addEventListener('click', () => {
 });
 
 //raycaster events test
-function onCanvasClick(evt) {
+function onModelClick(evt) {
     const mouse = {
         x: (evt.clientX/renderer.domElement.clientWidth) *2 -1,
         y: -(evt.clientY/renderer.domElement.clientHeight) *2 +1,
