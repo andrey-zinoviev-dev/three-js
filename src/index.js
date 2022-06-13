@@ -7,13 +7,33 @@ import texture from './t-shirt_web.FBX';
 import texture1 from './t-shirt.jpg';
 import texture2 from './inside.jpg'
 
-import { button } from './utils';
+import { button, colorButtons, changeButtonColor } from './utils';
 import * as TWEEN from '@tweenjs/tween.js';
 
 import './styles/index.css';
 
 
+//canvas for texture test
+const canvas = document.createElement('canvas');
+let ctx = canvas.getContext('2d');
+canvas.width = 10;
+canvas.height = 10;
+ctx.fillStyle = 'rgb(255, 255, 255)';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+let canvasTexture = new THREE.CanvasTexture(canvas);
+canvasTexture.needsUpdate = true;
 
+colorButtons.forEach((button) => {
+    return button.addEventListener('click', () => {
+        const result = changeButtonColor(button);
+        ctx.fillStyle = result;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        canvasTexture.needsUpdate = true;
+    });
+    
+});
+
+//THREE.JS
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color(0xFFFFFF);
 
@@ -44,8 +64,6 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.rotateSpeed = 0.85;
 
-//raycaster for model events
-
 //textures
 const extTexture = new THREE.TextureLoader().load(texture1);
 const intTexture = new THREE.TextureLoader().load(texture2);
@@ -60,6 +78,9 @@ const raycaster = new THREE.Raycaster();
 let loadedModel;
 let meshesFromLoadedModel = [];
 
+//color
+let modelColor;
+
 const fbxLoader = new FBXLoader();
 fbxLoader.load(
     texture,
@@ -70,11 +91,16 @@ fbxLoader.load(
                     child.material = new THREE.MeshBasicMaterial( {
                         map: intMaterial.map,
                     } );
+                    
                 }
                 if(child.name === 't-shirt') {
                     child.material = new THREE.MeshBasicMaterial({
-                        map: extMaterial.map,
-                    });
+                        map: canvasTexture,
+                    });    
+                    // child.material = new THREE.MeshBasicMaterial({
+                    //     // map: extMaterial.map,
+                    // });
+
 
                 }
                 meshesFromLoadedModel.push(child);
