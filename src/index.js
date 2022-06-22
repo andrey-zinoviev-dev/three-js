@@ -2,6 +2,7 @@ import 'regenerator-runtime';
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler';
 
 import texture from './t-shirt_web.FBX';
 import texture1 from './t-shirt.jpg';
@@ -14,24 +15,16 @@ import './styles/index.css';
 
 
 //canvas for texture test
-const canvas = document.createElement('canvas');
-let ctx = canvas.getContext('2d');
-canvas.width = 10;
-canvas.height = 10;
-ctx.fillStyle = 'rgb(255, 255, 255)';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-let canvasTexture = new THREE.CanvasTexture(canvas);
-canvasTexture.needsUpdate = true;
+// const canvas = document.createElement('canvas');
+// let ctx = canvas.getContext('2d');
 
-colorButtons.forEach((button) => {
-    return button.addEventListener('click', () => {
-        const result = changeButtonColor(button);
-        ctx.fillStyle = result;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        canvasTexture.needsUpdate = true;
-    });
-    
-});
+// ctx.fillStyle = 'rgb(255, 255, 255)';
+// ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+// let canvasTexture = new THREE.CanvasTexture(canvas);
+// canvasTexture.needsUpdate = true;
+
+
 
 //THREE.JS
 const scene = new THREE.Scene();
@@ -68,44 +61,51 @@ controls.rotateSpeed = 0.85;
 const extTexture = new THREE.TextureLoader().load(texture1);
 const intTexture = new THREE.TextureLoader().load(texture2);
 //materials
-const extMaterial = new THREE.MeshBasicMaterial({ map: extTexture, name: "t-shirt" });
+const extMaterial = new THREE.MeshBasicMaterial({ color: {r:1, g:1, b:1}, wireframe: true, opacity:0.05, name: "t-shirt" });
 const intMaterial = new THREE.MeshBasicMaterial({ map: intTexture, name: "inside" });
-
+//color buttons
+colorButtons.forEach((button) => {
+    return button.addEventListener('click', () => {
+        const result = changeButtonColor(button);
+        const newColor = new THREE.Color().set(result);
+        new TWEEN.Tween(extMaterial.color).to(newColor, 500).start();
+        // extMaterial.needsUpdate = true;
+        // ctx.fillStyle = result;
+        // ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // canvasTexture.needsUpdate = true;
+    });
+});
 //raycaster
 const raycaster = new THREE.Raycaster();
 
-
 let loadedModel;
 let meshesFromLoadedModel = [];
-
-//color
-let modelColor;
 
 const fbxLoader = new FBXLoader();
 fbxLoader.load(
     texture,
     (model) => {
+        
         model.traverse(function (child) {
             if(child.isMesh) {
                 if(child.name === 'inside') {
-                    child.material = new THREE.MeshBasicMaterial( {
-                        map: intMaterial.map,
-                    } );
+                    child.material = intMaterial;
                     
                 }
                 if(child.name === 't-shirt') {
-                    child.material = new THREE.MeshBasicMaterial({
-                        map: canvasTexture,
-                    });    
+                    // child.geometry = new THREE.BoxGeometry(1, 1, 1);
+                    child.material = extMaterial;
                     // child.material = new THREE.MeshBasicMaterial({
                     //     // map: extMaterial.map,
                     // });
 
-
+                    //model particles sampler
+                    const sampler = new MeshSurfaceSampler(child).build();
                 }
                 meshesFromLoadedModel.push(child);
             }
         });
+
         model.scale.multiplyScalar(0.75);
 
         //variable test
@@ -121,6 +121,7 @@ function animate() {
     // console.log(controls.getPolarAngle());
     controls.update();
 	requestAnimationFrame( animate );
+    TWEEN.update();
     TWEEN.update();
 	renderer.render( scene, camera );
 }
